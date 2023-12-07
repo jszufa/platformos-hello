@@ -1,9 +1,32 @@
-<h1>Welcome to your instance!</h1>
+{% liquid
+  graphql items = 'item/search'
+%}
 
-<p>The directory structure for your platformOS page has been created. You are all set to edit the files.</p>
+<!-- list of items -->
+<ul>
+	{% for item in items.records.results %}
+		<li>
+		  {{ item.title }}
+		  <form action="/item/delete" method="post">
+		  	<input type="hidden" name="id" value="{{ item.id }}">
+			<button type="submit">Mark as done</button>
+		  </form>
+		</li>
+	  {% endfor %}
+	<li>
+</ul>
 
-<p>If you are new to platformOS you might consider following our <a href="https://documentation.platformos.com/get-started">Get Started</a> guide that will walk you through all the knowledge required to start developing a page on platformOS.</p>
+<!-- information shown when the list is empty -->
+{% if items.records.total_entries == 0 %}
+	<div>There are no items in the list.</div>
+  {% endif %}
 
-<a href="https://platformos.com" class="logo">
-  <img src="{{ 'images/logo.svg' | asset_url }}" width="200" height="29" alt="platformOS">
-</a>
+<!-- form for adding new item -->
+<form action="/item/create" method="post">
+	<input type="hidden" name="recipient" value="jerzy.szufa@gmail.com">
+	<input type="text" name="title">
+	<button type="submit">Add item</button>
+</form>
+
+<!-- link to the About Me page -->
+<a href="/about">About Me</a>
